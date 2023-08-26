@@ -32,7 +32,7 @@ The application primarily consists of two users: Customer/User and Administrator
 
 # Table Design and Analysis
 
-<img src = "">
+<img src = "ER_Diagram.jpg">
 There are six entities total in the flight management system, each with its own primary and secondary keys.
 1.	User: This entity consists of one primary key – User_ID int(50). Other attributes are User_Name varchar(20), User_Email varchar(20), First_Name varchar(20), Last_Name varchar(20), User_Mobile varchar(20), User_Country varchar(20), Username varchar(20), Password varchar(20).
 2.	Flight_Details: This entity consists of one primary key – Flight_ID int(50). Other attributes are Departure_City varchar(30), Arrival_City varchar(30), Date int(50), Trip_Type varchar(20), Passengers_Count int(50).
