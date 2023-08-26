@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="3736"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Baggage_Track" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="117"/><column index="2" value="124"/><column index="3" value="114"/><column index="4" value="146"/><column index="5" value="165"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Bookings" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="113"/><column index="2" value="114"/><column index="3" value="124"/><column index="4" value="132"/><column index="5" value="133"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Flight_Details" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="91"/><column index="2" value="140"/><column index="3" value="110"/><column index="4" value="93"/><column index="5" value="95"/><column index="6" value="169"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Payment" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="142"/><column index="2" value="124"/><column index="3" value="146"/><column index="4" value="161"/><column index="5" value="162"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Ticket_Type" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="124"/><column index="2" value="117"/><column index="3" value="114"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="User" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="81"/><column index="2" value="109"/><column index="3" value="108"/><column index="4" value="106"/><column index="5" value="210"/><column index="6" value="117"/><column index="7" value="128"/><column index="8" value="96"/><column index="9" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="sqlite_sequence" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="121"/><column index="2" value="52"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE &quot;User&quot;(
+	&quot;User_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;User_Name&quot;	TEXT NOT NULL,
+	&quot;First_Name&quot; TEXT NOT NULL,
+	&quot;Last_Name&quot; TEXT NOT NULL,
+	&quot;User_Email&quot;	TEXT NOT NULL UNIQUE,
+	&quot;User_Mobile&quot;	INTEGER UNIQUE,
+	&quot;User_Country&quot;	TEXT,
+	&quot;Username&quot;	TEXT NOT NULL UNIQUE,
+	&quot;Password&quot;	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY(&quot;User_ID&quot; AUTOINCREMENT)
+);
+CREATE TABLE &quot;Ticket_Type&quot; (
+	&quot;FK_Flight_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;Ticket_Class&quot;	TEXT NOT NULL,
+	&quot;Ticket_Price&quot;	NUMERIC NOT NULL,
+	PRIMARY KEY(&quot;FK_Flight_ID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;FK_Flight_ID&quot;) REFERENCES &quot;Flight_Details&quot;(&quot;Flight_ID&quot;)
+);
+CREATE TABLE &quot;Payment&quot; (
+	&quot;Transaction_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;FK_Flight_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;FK_Booking_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;Transaction_Date&quot;	INTEGER NOT NULL,
+	&quot;Transaction_Time&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;Transaction_ID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;FK_Flight_ID&quot;) REFERENCES &quot;Flight_Details&quot;(&quot;Flight_ID&quot;),
+	FOREIGN KEY(&quot;FK_Booking_ID&quot;) REFERENCES &quot;Bookings&quot;(&quot;Booking_ID&quot;)
+);
+CREATE TABLE &quot;Flight_Details&quot; (
+	&quot;Flight_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;Departure_City&quot;	TEXT NOT NULL,
+	&quot;Arrival_City&quot;	TEXT NOT NULL,
+	&quot;Date&quot;	INTEGER NOT NULL,
+	&quot;Trip_Type&quot;	TEXT,
+	&quot;Passengers_Count&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;Flight_ID&quot; AUTOINCREMENT)
+);
+CREATE TABLE &quot;Bookings&quot; (
+	&quot;Booking_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;FK_User_ID&quot;	INTEGER NOT NULL,
+	&quot;FK_Flight_ID&quot;	INTEGER NOT NULL,
+	&quot;Booking_Date&quot;	INTEGER NOT NULL,
+	&quot;Booking_Time&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;Booking_ID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;FK_User_ID&quot;) REFERENCES &quot;User&quot;(&quot;User_ID&quot;),
+	FOREIGN KEY(&quot;FK_Flight_ID&quot;) REFERENCES &quot;Flight_Details&quot;(&quot;Flight_ID&quot;)
+);
+CREATE TABLE &quot;Baggage_Track&quot; (
+	&quot;Baggage_ID&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;FK_Flight_ID&quot;	INTEGER NOT NULL,
+	&quot;FK_User_ID&quot;	INTEGER NOT NULL,
+	&quot;FK_Booking_ID&quot;	INTEGER NOT NULL,
+	&quot;Baggage_location&quot;	NUMERIC NOT NULL,
+	PRIMARY KEY(&quot;Baggage_ID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;FK_User_ID&quot;) REFERENCES &quot;User&quot;(&quot;User_ID&quot;),
+	FOREIGN KEY(&quot;FK_Booking_ID&quot;) REFERENCES &quot;Bookings&quot;(&quot;Booking_ID&quot;),
+	FOREIGN KEY(&quot;FK_Flight_ID&quot;) REFERENCES &quot;Flight_Details&quot;(&quot;Flight_ID&quot;)
+);
+
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Manmitha&quot;, &quot;manmithap@gmail.com&quot;, &quot;9100142310&quot;, &quot;India&quot;, &quot;Manmitha&quot;, &quot;sql123&quot;, &quot;Manmitha&quot;, &quot;P&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Schmidt&quot;, &quot;schmidt10@gmail.com&quot;, &quot;8756437867&quot;, &quot;Israel&quot;, &quot;Schmidt&quot;, &quot;abcd120&quot;, &quot;Schmidt&quot;, &quot;Winston&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password,First_Name,Last_Name)
+VALUES (&quot;Nick&quot;, &quot;nickmiller@gmail.com&quot;, &quot;123789465&quot;, &quot;USA&quot;, &quot;NickMiller&quot;, &quot;qwedrt5&quot;, &quot;Nick&quot;, &quot;Miller&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Jess&quot;, &quot;jessica@gmail.com&quot;, &quot;453789034&quot;, &quot;United Kingdom&quot;, &quot;JessicaDay&quot;, &quot;nmbhgl90&quot;, &quot;Jessica&quot;, &quot;Day&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Jess&quot;, &quot;jessicad@gmail.com&quot;, &quot;453789030&quot;, &quot;UK&quot;, &quot;JessicaD&quot;, &quot;nmbhgl00&quot;, &quot;Jessica&quot;, &quot;Adam&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Winston&quot;, &quot;winstonbishop@gmail.com&quot;, &quot;7653789403&quot;, &quot;Spain&quot;, &quot;WinstonB&quot;, &quot;1890df3&quot;, &quot;Winston&quot;, &quot;Bishop&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Cece&quot;, &quot;cece098@gmail.com&quot;, &quot;76537894568&quot;, &quot;Japan&quot;, &quot;Cece098&quot;, &quot;iop90df3&quot;, &quot;Ciciliya&quot;, &quot;Schmidt&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Jake&quot;, &quot;jakep@gmail.com&quot;, &quot;90853789403&quot;, &quot;Canada&quot;, &quot;Jakeperalta&quot;, &quot;jfhs0df3&quot;, &quot;Jake&quot;, &quot;Peralta&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Amy&quot;, &quot;amy03@gmail.com&quot;, &quot;90356789403&quot;, &quot;China&quot;, &quot;Amy&quot;, &quot;456bsgd&quot;, &quot;Amy&quot;, &quot;Santiago&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Charles&quot;, &quot;charles@gmail.com&quot;, &quot;0944789403&quot;, &quot;Nepal&quot;, &quot;&quot;, &quot;ndgjdf3&quot;, &quot;Charles&quot;, &quot;Boyle&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Chandler&quot;, &quot;chandler@gmail.com&quot;, &quot;7653783903&quot;, &quot;Denmark&quot;, &quot;Chandler&quot;, &quot;nnfhjk&quot;, &quot;Chandler&quot;, &quot;Bing&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Monica&quot;, &quot;monica@gmail.com&quot;, &quot;98463789403&quot;, &quot;Germany&quot;, &quot;Monica&quot;, &quot;twuerf&quot;, &quot;Monica&quot;, &quot;Geller&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Rachel&quot;, &quot;rachel@gmail.com&quot;, &quot;765783503&quot;, &quot;Finland&quot;, &quot;Rachel&quot;, &quot;9030df3&quot;, &quot;Rachel&quot;, &quot;Green&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Shelden&quot;, &quot;sheldon@gmail.com&quot;, &quot;7653089403&quot;, &quot;Netherlands&quot;, &quot;Shelden&quot;, &quot;bdm0df3&quot;, &quot;Sheldon&quot;, &quot;Cooper&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Joey&quot;, &quot;joeyt@gmail.com&quot;, &quot;7853789403&quot;, &quot;Korea&quot;,&quot;Joey&quot;, &quot;90nfsdf3&quot;, &quot;Joey&quot;, &quot;Tribbiani&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Rosa&quot;, &quot;rosat@gmail.com&quot;, &quot;7853787803&quot;, &quot;Korea&quot;,&quot;Rosa&quot;, &quot;uoinfsdf3&quot;, &quot;Rosa&quot;, &quot;Diaz&quot;);
+INSERT INTO User(User_Name, User_Email, User_Mobile, User_Country, Username, Password, First_Name, Last_Name)
+VALUES (&quot;Holt&quot;, &quot;holt@gmail.com&quot;, &quot;7853787806&quot;, &quot;China&quot;,&quot;Holt&quot;, &quot;vfgfsdf3&quot;, &quot;Holt&quot;, &quot;Raymond&quot;);
+
+
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Hyderabad&quot;, &quot;Delhi&quot;, &quot;16/03/2000&quot;, &quot;One-way&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Boston&quot;, &quot;New York&quot;, &quot;01/01/2023&quot;, &quot;One-way&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;London&quot;, &quot;Mumbai&quot;, &quot;09/05/2023&quot;, &quot;Round-trip&quot;, &quot;3&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Goa&quot;, &quot;Bangalore&quot;, &quot;13/09/2024&quot;, &quot;Round-trip&quot;, &quot;4&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Paris&quot;, &quot;Jenna&quot;, &quot;10/05/2022&quot;, &quot;One-way&quot;, &quot;2&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Hyderabad&quot;, &quot;Denmark&quot;, &quot;30/09/2022&quot;, &quot;One-way&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Zurich&quot;, &quot;Dallas&quot;, &quot;08/11/2023&quot;, &quot;Round-trip&quot;, &quot;6&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Amsterdam&quot;, &quot;Singapore&quot;, &quot;17/03/2024&quot;, &quot;One-way&quot;, &quot;5&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Singapore&quot;, &quot;Thailand&quot;, &quot;11/05/2023&quot;, &quot;One-way&quot;, &quot;4&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Goa&quot;, &quot;Delhi&quot;, &quot;30/07/2022&quot;, &quot;Round-trip&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Paris&quot;, &quot;Jenna&quot;, &quot;10/05/2022&quot;, &quot;Round-trip&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;London&quot;, &quot;Mumbai&quot;, &quot;09/05/2023&quot;, &quot;One-way&quot;, &quot;4&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Goa&quot;, &quot;Bangalore&quot;, &quot;13/09/2024&quot;, &quot;Round-trip&quot;, &quot;1&quot;);
+INSERT INTO Flight_Details(Departure_City, Arrival_City, Date, Trip_Type, Passengers_Count)
+VALUES (&quot;Boston&quot;, &quot;New York&quot;, &quot;01/01/2023&quot;, &quot;One-way&quot;, &quot;5&quot;);
+
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 200.40);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Business-Class&quot;, 599.99);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 4599.85);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;First-Class&quot;, 999.25);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Business-Class&quot;, 1500.76);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Business-Class&quot;, 800.54);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 2056.76);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;First-Class&quot;, 645.78);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 3408.754);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;First-Class&quot;, 8400.99);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 4673.76);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Economy&quot;, 7603.37);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;First-Class&quot;, 9560.38);
+INSERT INTO Ticket_Type (Ticket_Class, Ticket_Price)
+VALUES (&quot;Business-Class&quot;, 5832.96);
+
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 1), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 1), &quot;10/03/2022&quot;, &quot;11:15&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 2), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 2), &quot;26/10/2019&quot;, &quot;22:45&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 3), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 3), &quot;19/05/2017&quot;, &quot;16:28&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 4), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 4), &quot;17/08/2020&quot;, &quot;17:55&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 5), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 5), &quot;30/04/2022&quot;, &quot;12:25&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 6), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 6), &quot;30/04/2022&quot;, &quot;12:26&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 7), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 7), &quot;17/10/2020&quot;, &quot;13:07&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 8), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 8), &quot;19/05/2017&quot;, &quot;17:56&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 9), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 9), &quot;06/05/2022&quot;, &quot;10:17&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 10), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 10), &quot;31/08/2022&quot;, &quot;23:10&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 11), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 11), &quot;09/12/2020&quot;, &quot;12:45&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 12), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 12), &quot;16/02/2021&quot;, &quot;19:14&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 13), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 13), &quot;18/10/2022&quot;, &quot;14:25&quot;);
+INSERT INTO Bookings(FK_User_ID, FK_Flight_ID, Booking_Date, Booking_Time)
+VALUES((SELECT User_ID FROM User WHERE User_ID = 14), (SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 14), &quot;16/02/2021&quot;, &quot;12:25&quot;);
+
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 1),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 1),&quot;15/03/2022&quot;, &quot;10:15&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 2),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 2),&quot;26/10/2019&quot;, &quot;20:30&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 3),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 3),&quot;19/05/2017&quot;, &quot;14:33&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 4),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 4),&quot;17/08/2020&quot;, &quot;13:53&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 5),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 5),&quot;30/04/2022&quot;, &quot;09:19&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 6),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 6),&quot;16/02/2021&quot;, &quot;07:50&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 7),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 7),&quot;12/02/2022&quot;, &quot;18:30&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 8),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 8),&quot;08/04/2022&quot;, &quot;03:08&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 9),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 9),&quot;17/05/2022&quot;, &quot;16:43&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 10),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 10),&quot;09/06/2022&quot;, &quot;07:50&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 11),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 11),&quot;16/02/2021&quot;, &quot;07:57&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 12),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 12),&quot;08/07/2020&quot;, &quot;08:20&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 13),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 13),&quot;05/11/2022&quot;, &quot;15:40&quot;);
+INSERT INTO Payment(FK_Flight_ID,FK_Booking_ID,Transaction_Date, Transaction_Time)
+VALUES ((SELECT Flight_ID from Flight_Details WHERE Flight_ID = 14),(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 14),&quot;26/09/2017&quot;, &quot;07:50&quot;);
+
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 1), (SELECT User_ID FROM User WHERE User_ID = 1),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 1), &quot;Chandigarh&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 2), (SELECT User_ID FROM User WHERE User_ID = 2),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 2), &quot;Seaport&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 3), (SELECT User_ID FROM User WHERE User_ID = 3),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 3), &quot;Dubai&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 4), (SELECT User_ID FROM User WHERE User_ID = 4),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 4), &quot;Hampi&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 5), (SELECT User_ID FROM User WHERE User_ID = 5),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 5), &quot;Amsterdam&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 6), (SELECT User_ID FROM User WHERE User_ID = 6),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 6), &quot;Hyderabad&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 7), (SELECT User_ID FROM User WHERE User_ID = 7),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 7), &quot;Bangalore&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 8), (SELECT User_ID FROM User WHERE User_ID = 8),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 8), &quot;Boston&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 9), (SELECT User_ID FROM User WHERE User_ID = 9),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 9), &quot;Chicago&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 10), (SELECT User_ID FROM User WHERE User_ID = 10),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 10), &quot;London&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 11), (SELECT User_ID FROM User WHERE User_ID = 11),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 11), &quot;Goa&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 12), (SELECT User_ID FROM User WHERE User_ID = 12),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 12), &quot;Tokyo&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 13), (SELECT User_ID FROM User WHERE User_ID = 13),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 13), &quot;Seoul&quot;);
+INSERT INTO Baggage_Track(FK_Flight_ID, FK_User_ID, FK_Booking_ID, Baggage_location)
+VALUES ((SELECT Flight_ID FROM Flight_Details WHERE Flight_ID = 14), (SELECT User_ID FROM User WHERE User_ID = 14),
+		(SELECT Booking_ID FROM Bookings WHERE Booking_ID = 14), &quot;Chennai&quot;);
+
+/* The admin wants to retrieve data about the passengers travelling to New York in Business Class. */		
+SELECT User_Name, Departure_City, Arrival_City, Date, Ticket_Class, Ticket_Price, Booking_Date, Booking_Time
+FROM Flight_Details f
+JOIN Bookings b
+ON f.Flight_ID = b.FK_Flight_ID
+JOIN User u
+ON u.User_ID = b.FK_User_ID
+JOIN Ticket_Type t
+ON t.FK_Flight_ID = f.Flight_ID
+WHERE Arrival_City = &quot;New York&quot; AND Ticket_Class = &quot;Business-Class&quot;;
+
+/* The admin wants to extract data of all the passengers travelling in Economy class. */
+SELECT User_Name, Ticket_Class, Ticket_Price, Passengers_Count, Booking_Date
+FROM Flight_Details f
+JOIN Bookings b
+ON f.Flight_ID = b.FK_Flight_ID
+JOIN User u
+ON u.User_ID = b.FK_User_ID
+JOIN Ticket_Type t
+ON t.FK_Flight_ID = f.Flight_ID
+WHERE Ticket_Class = &quot;Economy&quot;;
+
+/* A person named &quot;Cece&quot; wants to check the live location of her baggage. */
+SELECT User_Name, Departure_City, Arrival_City, Trip_Type, Baggage_location
+FROM Baggage_Track bt
+JOIN User u
+ON bt.FK_User_ID = u.User_ID
+JOIN Flight_Details f
+ON f.Flight_ID = bt.FK_Flight_ID
+WHERE Departure_City = &quot;Hyderabad&quot; AND User_Name = &quot;Cece&quot;;
+
+/* A person named &quot;Chandler&quot; wants to retrieve his upcoming trip booking details. */
+SELECT User_Name, Departure_City, Arrival_City, Transaction_ID, Transaction_Date, Transaction_Time, Ticket_Price
+FROM User u
+JOIN Bookings b
+ON b.FK_User_ID = u.User_ID
+JOIN Flight_Details f
+ON f.Flight_ID = b.FK_Flight_ID
+JOIN Payment p
+ON p.FK_Flight_ID = f.Flight_ID
+JOIN Ticket_Type t
+ON t.FK_Flight_ID = p.FK_Flight_ID
+WHERE User_Name = &quot;Chandler&quot;;
+
+/* The admin wants information of passengers travelling to Delhi on April 30th, 2022. */
+SELECT User_Name, Departure_City, Arrival_City, Trip_Type, Ticket_Class
+FROM User u
+JOIN Bookings b
+ON b.FK_User_ID = u.User_ID
+JOIN Flight_Details f
+ON f.Flight_ID = b.FK_Flight_ID
+JOIN Ticket_Type t
+ON t.FK_Flight_ID = f.Flight_ID
+WHERE Arrival_City = &quot;Delhi&quot; AND Date = &quot;30/07/2022&quot;;
+
+/*User story*/
+SELECT Departure_City, Arrival_City, date, Trip_Type
+FROM Flight_Details
+WHERE Departure_City = &quot;Goa&quot; AND Arrival_City = &quot;Delhi&quot; AND Date = &quot;30/07/2022&quot; AND Trip_Type = &quot;Round-trip&quot;;
+
+SELECT First_Name, Last_Name, User_Email, User_Mobile, Departure_City, Arrival_City, date
+FROM Flight_Details
+JOIN Bookings
+ON Bookings.FK_Flight_Details = Flight_Details.Flight_ID
+JOIN User
+ON User.User_ID = Bookings.FK_User_ID
+WHERE Departure_City = &quot;Goa&quot; AND Arrival_City = &quot;Delhi&quot; AND Date = &quot;30/07/2022&quot; AND Trip_Type = &quot;Round-trip&quot;;
+
+SELECT Departure_city, Arrival_City, Date, Ticket_Class, Ticket_Price
+FROM Flight_Details
+JOIN Ticket_Type
+ON Ticket_Type.FK_Flight_ID = Flight_Details.Flight_ID
+WHERE Departure_City = &quot;Goa&quot; AND Arrival_City = &quot;Delhi&quot; AND Date = &quot;30/07/2022&quot;;
+
+SELECT First_Name, Last_Name, Flight_ID, Departure_City, Arrival_City, date, Booking_ID, Booking_Date
+FROM Flight_Details
+JOIN Ticket_Type
+ON Ticket_Type.FK_Flight_ID = Flight_Details.Flight_ID
+JOIN Bookings
+ON Bookings.FK_Flight_Details = Flight_Details.Flight_ID
+JOIN User
+ON User.User_ID = Bookings.FK_User_ID
+WHERE Username = &quot;JessicaD&quot;;
+
+SELECT User_Name, Flight_ID, Departure_city, Arrival_City, Baggage_location
+FROM Baggage_Track bt
+JOIN User u ON bt.FK_User_ID = u.User_ID
+JOIN Flight_Details f ON f.Flight_ID = bt.FK_Flight_ID
+WHERE Departure_City = &quot;Goa&quot; AND User_Name = &quot;Jess&quot;;
+
+/* Number of flights*/
+SELECT count(Flight_ID) as Number_of_flights
+FROM Flight_Details;
+
+/*Number of Users*/
+SELECT count(User_ID) as Number_of_Users
+FROM User;
+
+/*Number of bookings*/
+SELECT count(Booking_ID) as Number_of_bookings
+FROM Bookings;
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
